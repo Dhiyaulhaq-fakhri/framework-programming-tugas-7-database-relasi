@@ -10,4 +10,4 @@ import { Customer } from './entities/customer.entity.js';
   controllers: [CustomersController],
   providers: [CustomersService],
 })
-export class CustomersModule {}
+export class CustomersModule{}

@@ -18,6 +18,7 @@ export class CustomersService {
     private customerRepository: Repository<Customer>,
   ) {}
 
+  // mnambahkan customer baru
   async create(createCustomerDto: CreateCustomerDto) {
     const existingCustomer = await this.customerRepository.findOne({
       where: { email: createCustomerDto.email },
@@ -32,10 +33,13 @@ export class CustomersService {
     return this.customerRepository.save(customer);
   }
 
+
+  // menampilkan semua customer
   findAll() {
     return this.customerRepository.find();
   }
 
+  // menampilkan customer by id
   async findOne(id: number) {
     const customer = await this.customerRepository.findOne({
       where: { id },
@@ -48,6 +52,8 @@ export class CustomersService {
     return customer;
   }
 
+  
+  // update customers by id
   async update(id: number, updateCustomerDto: UpdateCustomerDto) {
     const customer = await this.findOne(id);
 
@@ -69,6 +75,7 @@ export class CustomersService {
     return this.customerRepository.save(customer);
   }
 
+  // hapus customers by id
   async remove(id: number) {
     const customer = await this.findOne(id);
 

@@ -13,7 +13,7 @@ export class CreateCustomerDto {
   @MaxLength(100)
   name: string;
 
-  @IsEmail({}, { message: 'Format email tidak valid' })
+  @IsEmail({}, { message: 'Format email salah' })
   @IsNotEmpty({ message: 'Email tidak boleh kosong' })
   email: string;
 
