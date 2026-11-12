@@ -1,4 +1,3 @@
-
 import {
   IsString,
   IsNotEmpty,
@@ -6,6 +5,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
+// DTO untuk membuat kategori baru dengan validasi nama dan deskripsi.
 export class CreateCategoryDto {
   @IsString()
   @IsNotEmpty()

@@ -10,12 +10,14 @@ import { UpdateOrderStatusDto } from './dto/update-order-status.dto.js';
 
 @Injectable()
 export class OrdersService {
+  // Menyiapkan repository pesanan dan koneksi transaksi database.
   constructor(
     @InjectRepository(Order)
     private readonly orderRepo: Repository<Order>,
     private readonly dataSource: DataSource,
   ) {}
-  
+
+  // Membuat pesanan baru sekaligus memvalidasi pelanggan, produk, dan stok.
   async create(dto: CreateOrderDto) {
     return this.dataSource.transaction(async (manager) => {
       // 1. validasi customer
@@ -95,7 +97,7 @@ export class OrdersService {
     });
   }
 
-
+  // Mengambil seluruh pesanan beserta data pelanggan dan produk.
   async findAll() {
     const orders = await this.orderRepo.find({
       relations: {
@@ -109,6 +111,7 @@ export class OrdersService {
     return { message: 'Data berhasil diambil', data: orders };
   }
 
+  // Mengambil detail pesanan berdasarkan ID.
   async findOne(id: string) {
     const order = await this.orderRepo.findOne({
       where: { id },
@@ -128,6 +131,7 @@ export class OrdersService {
     };
   }
 
+  // Mengubah status pesanan dan mengembalikan stok jika pesanan dibatalkan.
   async updateStatus(id: string, dto: UpdateOrderStatusDto) {
     return this.dataSource.transaction(async (manager) => {
       const order = await manager.findOne(Order, {
@@ -177,6 +181,7 @@ export class OrdersService {
     });
   }
 
+  // Menghapus pesanan yang sudah berstatus CANCELLED.
   async remove(id: string) {
     return this.dataSource.transaction(async (manager) => {
       const order = await manager.findOne(Order, {

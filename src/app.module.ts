@@ -7,10 +7,13 @@ import { OrdersModule } from './orders/orders.module.js';
 import { CustomersModule } from './customers/customers.module.js';
 import { ProductsModule } from './products/products.module.js';
 
+// Mengatur konfigurasi utama aplikasi dan menghubungkan seluruh modul.
 @Module({
   imports: [
+    // Memuat konfigurasi dari file .env agar dapat digunakan secara global.
     ConfigModule.forRoot({ isGlobal: true }),
 
+    // Mengatur koneksi database PostgreSQL menggunakan konfigurasi environment.
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
@@ -26,6 +29,7 @@ import { ProductsModule } from './products/products.module.js';
       }),
     }),
 
+    // Mendaftarkan modul pelanggan, produk, dan pesanan.
     CustomersModule,
     ProductsModule,
     OrdersModule,

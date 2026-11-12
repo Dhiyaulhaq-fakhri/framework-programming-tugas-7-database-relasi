@@ -6,6 +6,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
+// Mengatur koneksi database PostgreSQL dan mendaftarkan entity yang digunakan untuk proses seeding.
 const AppDataSource = new DataSource({
   type: 'postgres',
   host: process.env.DB_HOST || 'localhost',
@@ -17,12 +18,14 @@ const AppDataSource = new DataSource({
   synchronize: false, // Jangan synchronize saat seed untuk menghindari perubahan skema tak sengaja
 });
 
+// Fungsi utama untuk menghubungkan database dan memasukkan data awal ke setiap tabel.
 async function runSeed() {
   try {
     await AppDataSource.initialize();
     console.log('🔗 Database connected!');
 
     // 1. Seed Categories
+    // Membuat dan menyimpan data awal kategori makanan dan minuman.
     const categoryRepo = AppDataSource.getRepository(Category);
     const catMinuman = categoryRepo.create({ name: 'Minuman', description: 'Aneka minuman segar' });
     const catMakanan = categoryRepo.create({ name: 'Makanan', description: 'Aneka makanan berat' });
@@ -30,6 +33,7 @@ async function runSeed() {
     console.log('✅ Categories seeded');
 
     // 2. Seed Products
+    // Membuat data produk awal dan menghubungkannya dengan kategori masing-masing.
     const productRepo = AppDataSource.getRepository(Product);
     const prodKopi = productRepo.create({ name: 'Kopi Susu', price: 18000, stock: 50, category: catMinuman });
     const prodTeh = productRepo.create({ name: 'Teh Manis', price: 8000, stock: 30, category: catMinuman });
@@ -38,18 +42,22 @@ async function runSeed() {
     console.log('✅ Products seeded');
 
     // 3. Seed Customers
+    // Membuat dan menyimpan data awal pelanggan beserta informasi kontak dan alamat.
     const customerRepo = AppDataSource.getRepository(Customer);
     const custBudi = customerRepo.create({ name: 'Budi', email: 'budi@example.com', phone: '0812345', address: 'Jl. Merdeka 1' });
     const custAni = customerRepo.create({ name: 'Ani', email: 'ani@example.com', phone: '0898765', address: 'Jl. Sudirman 2' });
     await customerRepo.save([custBudi, custAni]);
     console.log('✅ Customers seeded');
 
+    // Menampilkan pesan bahwa seluruh data awal berhasil dimasukkan.
     console.log('🎉 Seed data berhasil dimasukkan!');
     process.exit(0);
   } catch (error) {
+    // Menampilkan pesan error dan menghentikan proses jika seeding gagal.
     console.error('❌ Error saat seeding:', error);
     process.exit(1);
   }
 }
 
+// Menjalankan fungsi seeding.
 runSeed();

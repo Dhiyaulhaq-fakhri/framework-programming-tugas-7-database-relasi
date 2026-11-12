@@ -1,4 +1,3 @@
-
 import {
   Injectable,
   NotFoundException,
@@ -11,14 +10,17 @@ import { Category } from './entities/category.entity.js';
 import { CreateCategoryDto } from './dto/create-category.dto.js';
 import { UpdateCategoryDto } from './dto/update-category.dto.js';
 
+// Service untuk menangani proses pengelolaan data kategori menggunakan TypeORM.
 @Injectable()
 export class CategoriesService {
+  // Menghubungkan repository Category agar service dapat mengakses database.
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
   ) {}
 
   // CREATE CATEGORY
+  // Membuat objek kategori baru dan menyimpannya ke database.
   async create(createCategoryDto: CreateCategoryDto) {
     const category = this.categoryRepository.create(createCategoryDto);
 
@@ -26,6 +28,7 @@ export class CategoriesService {
   }
 
   // GET ALL CATEGORIES
+  // Mengambil seluruh data kategori dan mengurutkannya berdasarkan ID secara ascending.
   async findAll() {
     return await this.categoryRepository.find({
       order: { id: 'ASC' },
@@ -33,6 +36,7 @@ export class CategoriesService {
   }
 
   // GET CATEGORY BY ID
+  // Mencari kategori berdasarkan ID dan menampilkan error jika data tidak ditemukan.
   async findOne(id: number) {
     const category = await this.categoryRepository.findOne({
       where: { id },
@@ -48,6 +52,7 @@ export class CategoriesService {
   }
 
   // UPDATE CATEGORY
+  // Mengambil kategori berdasarkan ID, memperbarui datanya, lalu menyimpan perubahan.
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.findOne(id);
 
@@ -57,6 +62,7 @@ export class CategoriesService {
   }
 
   // DELETE CATEGORY
+  // Menghapus kategori jika ditemukan dan tidak memiliki produk yang terhubung.
   async remove(id: number) {
     const category = await this.categoryRepository.findOne({
       where: { id },

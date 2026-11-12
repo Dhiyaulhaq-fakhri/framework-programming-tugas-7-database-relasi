@@ -1,4 +1,3 @@
-
 import {
   Injectable,
   NotFoundException,
@@ -11,14 +10,16 @@ import { Customer } from './entities/customer.entity.js';
 import { CreateCustomerDto } from './dto/create-customer.dto.js';
 import { UpdateCustomerDto } from './dto/update-customer.dto.js';
 
+// Service untuk menangani proses pengelolaan data pelanggan menggunakan TypeORM.
 @Injectable()
 export class CustomersService {
+  // Menghubungkan repository Customer agar service dapat mengakses database.
   constructor(
     @InjectRepository(Customer)
     private customerRepository: Repository<Customer>,
   ) {}
 
-  // mnambahkan customer baru
+  // Menambahkan customer baru dengan memeriksa apakah email sudah digunakan.
   async create(createCustomerDto: CreateCustomerDto) {
     const existingCustomer = await this.customerRepository.findOne({
       where: { email: createCustomerDto.email },
@@ -34,12 +35,12 @@ export class CustomersService {
   }
 
 
-  // menampilkan semua customer
+  // Mengambil dan menampilkan seluruh data customer dari database.
   findAll() {
     return this.customerRepository.find();
   }
 
-  // menampilkan customer by id
+  // Mencari data customer berdasarkan ID dan menampilkan error jika tidak ditemukan.
   async findOne(id: number) {
     const customer = await this.customerRepository.findOne({
       where: { id },
@@ -52,8 +53,8 @@ export class CustomersService {
     return customer;
   }
 
-  
-  // update customers by id
+
+  // Memperbarui data customer berdasarkan ID dengan memeriksa keunikan email.
   async update(id: number, updateCustomerDto: UpdateCustomerDto) {
     const customer = await this.findOne(id);
 
@@ -75,7 +76,7 @@ export class CustomersService {
     return this.customerRepository.save(customer);
   }
 
-  // hapus customers by id
+  // Menghapus data customer berdasarkan ID dan mengembalikan pesan keberhasilan.
   async remove(id: number) {
     const customer = await this.findOne(id);
 
