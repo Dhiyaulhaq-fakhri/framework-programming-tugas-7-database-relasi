@@ -19,7 +19,8 @@
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
-    "test:e2e": "vitest run --config ./vitest.config.e2e.ts"
+    "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
+    "seed": "tsc --ignoreConfig src/database/seeds/seed.ts --outDir dist-seed --module nodenext --moduleResolution nodenext --target es2022 --experimentalDecorators --emitDecoratorMetadata && node dist-seed/database/seeds/seed.js"
   },
   "dependencies": {
     "@nestjs/common": "^12.0.1",
